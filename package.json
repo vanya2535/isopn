@@ -1,0 +1,47 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "dev:backend": "nodemon ./backend/index.js",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@babel/eslint-parser": "^7.23.10",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.0",
+    "nuxt": "^3.10.3",
+    "uuid": "^9.0.1",
+    "vue": "^3.4.19",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@nuxtjs/eslint-module": "^4.1.0",
+    "@nuxtjs/stylelint-module": "^5.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.22.0",
+    "nodemon": "^3.1.0",
+    "postcss-html": "^1.6.0",
+    "postcss-values-parser": "^6.0.2",
+    "sass": "^1.71.1",
+    "sass-loader": "^14.1.1",
+    "stylelint": "^16.2.1",
+    "stylelint-config-css-modules": "^4.4.0",
+    "stylelint-config-standard": "^36.0.0",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-order": "^6.0.4",
+    "stylelint-scss": "^6.1.0"
+  }
+}
