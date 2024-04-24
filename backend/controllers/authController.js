@@ -1,11 +1,10 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { v4 as uuid } from 'uuid';
 import { validationResult } from 'express-validator';
-import config from '../config.js';
 import User from '../models/User.js';
-
-
-const generateAccessToken = id => jwt.sign({ id }, config.secret, { expiresIn: '24h' });
+import { sendChangePasswordMail, sendConfirmationMail } from '../nodemailer.js';
+import { generateAccessToken, generateRefreshToken } from '../utils/token.js';
+import { mapErrors } from '../utils/errors.js';
 
 class AuthController {
     async register(req, res) {
@@ -13,49 +12,82 @@ class AuthController {
             const errors = validationResult(req);
 
             if (!errors.isEmpty()) {
-                return res.status(400).json(errors);
+                return res.status(400).json(mapErrors(errors));
             }
 
-            const { username, password } = req.body;
-            const candidate = await User.findOne({ username });
+            const { email, password } = req.body;
 
-            if (candidate) {
+            const candidate = await User.findOne({ email });
+            if (candidate?.emailConfirmed) {
                 return res
                     .status(400)
-                    .json({ message: 'Пользователь с таким именем уже зарегистрирован' });
+                    .json({ message: 'Данный адрес электронной почты уже используется' });
             }
 
             const hashPassword = bcrypt.hashSync(password, 7);
 
-            const user = new User({
-                username,
+            const user = candidate || new User({
+                email,
                 password: hashPassword,
+                updateToken: uuid(),
             });
 
             await user.save();
+            sendConfirmationMail(user);
 
-            const token = generateAccessToken(user._id);
-
-            return res.json({
-                token,
-                user: {
-                    id: user._id,
-                    username,
-                },
-            });
+            return res.end();
         } catch (e) {
             console.log(e);
             return res.status(400).json({ message: 'Ошибка в процессе регистрации' });
         }
     }
 
+    async confirm(req, res) {
+        try {
+            const updateToken = req.query.updateToken;
+
+            const user = await User.findOne({ updateToken });
+            if (!user) {
+                return res
+                    .status(400)
+                    .json({ message: 'Неверный токен обновления пользователя' });
+            }
+
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user._id);
+
+            user.emailConfirmed = true;
+            user.refreshToken = refreshToken;
+            await user.save();
+
+            return res.json({
+                accessToken,
+                refreshToken,
+                email: user.email,
+            });
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ message: 'Ошибка в процессе подтверждения регистрации' });
+        }
+    }
+
     async login(req, res) {
         try {
-            const { username, password } = req.body;
-            const user = await User.findOne({ username });
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.status(400).json(mapErrors(errors));
+            }
+
+            const { email, password } = req.body;
+            const user = await User.findOne({ email });
 
             if (!user) {
                 return res.status(400).json({ message: 'Пользователь не найден' });
+            }
+
+            if (!user.emailConfirmed) {
+                return res.status(400).json({ message: 'Подтвердите адрес электронной почты для авторизации' });
             }
 
             const validPassword = bcrypt.compareSync(password, user.password);
@@ -64,14 +96,16 @@ class AuthController {
                 return res.status(400).json({ message: 'Неверный пароль' });
             }
 
-            const token = generateAccessToken(user._id);
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user._id);
+
+            user.refreshToken = refreshToken;
+            await user.save();
 
             return res.json({
-                token,
-                user: {
-                    id: user._id,
-                    username,
-                },
+                accessToken,
+                refreshToken,
+                email: user.email,
             });
         } catch (e) {
             console.log(e);
@@ -79,34 +113,79 @@ class AuthController {
         }
     }
 
-    async getData(req, res) {
+    async restore(req, res) {
         try {
-            const { token } = req.query;
+            const errors = validationResult(req);
 
-            if (!token) {
-                return res.status(403).json({ message: 'Пользователь не авторизован' });
+            if (!errors.isEmpty()) {
+                return res.status(400).json(mapErrors(errors));
             }
 
-            const { id } = jwt.verify(token, config.secret);
-
-            const user = await User.findById(id);
+            const email = req.body.email;
+            const user = await User.findOne({ email });
 
             if (!user) {
                 return res.status(400).json({ message: 'Пользователь не найден' });
             }
 
-            return res.status(200).json({
-                token,
-                user: {
-                    id: user._id,
-                    username: user.username,
-                },
+            user.updateToken = uuid();
+            await user.save();
+
+            sendChangePasswordMail(user);
+
+            return res.end();
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ message: 'Ошибка в процессе смены пароля' });
+        }
+    }
+
+    async restoreConfirm(req, res) {
+        try {
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                return res.status(400).json(mapErrors(errors));
+            }
+
+            const updateToken = req.query.updateToken;
+
+            const user = await User.findOne({ updateToken });
+            if (!user) {
+                return res
+                    .status(400)
+                    .json({ message: 'Неверный ID пользователя' });
+            }
+
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user._id);
+
+            const password = req.body.password;
+            user.password = bcrypt.hashSync(password, 7);
+            user.refreshToken = refreshToken;
+            await user.save();
+
+            return res.json({
+                accessToken,
+                refreshToken,
+                email: user.email,
             });
         } catch (e) {
             console.log(e);
-            return res
-                .status(400)
-                .json({ message: 'Ошибка в процессе получения данных' });
+            return res.status(400).json({ message: 'Ошибка в процессе смены пароля' });
+        }
+    }
+
+    async check(req, res) {
+        try {
+            return res.json({
+                accessToken: req.accessToken,
+                refreshToken: req.refreshToken,
+                email: req.email,
+            });
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ message: 'Ошибка в процессе check' });
         }
     }
 }
