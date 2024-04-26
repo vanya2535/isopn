@@ -7,10 +7,15 @@ import { NotificationTypesEnum } from '~/types/notification';
 
 export const useUserStore = defineStore('user', () => {
     const { $apiFetcher } = useNuxtApp();
+    const router = useRouter();
     const notificationStore = useNotificationStore();
 
-    const accessTokenCookie = useCookie('accessToken');
-    const refreshTokenCookie = useCookie('refreshToken');
+    const accessTokenCookie = useCookie('accessToken', {
+        maxAge: 60,
+    });
+    const refreshTokenCookie = useCookie('refreshToken', {
+        maxAge: 172800,
+    });
 
     const email = ref<string>('');
     const accessToken = ref<string>(accessTokenCookie.value || '');
@@ -24,10 +29,10 @@ export const useUserStore = defineStore('user', () => {
         refreshTokenCookie.value = value;
     });
 
-    async function register(body: TLoginData): Promise<object | IFetchErrorData<TAuthFields>> {
+    async function register(body: TLoginData): Promise<void | IFetchErrorData<TAuthFields>> {
         try {
-            const res = <object> await $apiFetcher.post('/auth/register/', { body });
-            return Promise.resolve(res);
+            await $apiFetcher.post('/auth/register/', { body });
+            return Promise.resolve();
         } catch (e) {
             console.error('store/user/register: ', e);
             return Promise.reject((e as IFetchError<TAuthFields>).data);
@@ -66,12 +71,14 @@ export const useUserStore = defineStore('user', () => {
         email.value = '';
         accessToken.value = '';
         refreshToken.value = '';
+
+        router.push('/auth');
     }
 
-    async function restore(body: TRestoreData): Promise<object | IFetchErrorData<TAuthFields>> {
+    async function restore(body: TRestoreData): Promise<void | IFetchErrorData<TAuthFields>> {
         try {
-            const res = <object> await $apiFetcher.post('/auth/restore/', { body });
-            return Promise.resolve(res);
+            await $apiFetcher.post('/auth/restore/', { body });
+            return Promise.resolve();
         } catch (e) {
             console.error('store/user/restore: ', e);
             return Promise.reject((e as IFetchError<TAuthFields>).data);

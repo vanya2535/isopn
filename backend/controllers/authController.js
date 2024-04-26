@@ -176,13 +176,9 @@ class AuthController {
         }
     }
 
-    async check(req, res) {
+    async check(_, res) {
         try {
-            return res.json({
-                accessToken: req.accessToken,
-                refreshToken: req.refreshToken,
-                email: req.email,
-            });
+            return res.json();
         } catch (e) {
             console.log(e);
             return res.status(400).json({ message: 'Ошибка в процессе check' });

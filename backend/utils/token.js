@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import config from '../config.js';
 
-export const generateAccessToken = ({ _id, email }) => jwt.sign({ _id, email }, config.SECRET_KEY, { expiresIn: '1m' });
+export const generateAccessToken = ({ _id, email }) => jwt.sign({ _id, email }, config.SECRET_KEY, { expiresIn: '2m' });
 export const generateRefreshToken = _id => jwt.sign({ _id }, config.SECRET_KEY, { expiresIn: '2d' });
 
 export function verifyToken(token) {

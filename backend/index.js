@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import config from './config.js';
+import { jsonInterceptor } from './utils/jsonInterceptor.js';
 
 import authRouter from './routers/authRouter.js';
 
@@ -18,6 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
+app.use(jsonInterceptor);
 
 app.use('/auth', authRouter);
 

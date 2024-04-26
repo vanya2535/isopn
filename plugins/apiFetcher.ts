@@ -56,6 +56,11 @@ export default defineNuxtPlugin(() => {
                 const notificationStore = useNotificationStore();
                 notificationStore.pushMessage(response._data.message, NotificationTypesEnum.ERROR);
             }
+
+            if (response.status === 403) {
+                const userStore = useUserStore();
+                userStore.logout();
+            }
         },
     });
 

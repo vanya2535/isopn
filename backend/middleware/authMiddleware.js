@@ -28,18 +28,25 @@ export default async function(req, res, next) {
             const newAccessToken = generateAccessToken(user);
             const newRefreshToken = generateRefreshToken(user._id);
 
-            req.accessToken = newAccessToken;
-            req.refreshToken = newRefreshToken;
-            req.email = user.email;
+            req.user = {
+                _id: user._id,
+                email: user.email,
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+            };
 
             user.refreshToken = newRefreshToken;
             await user.save();
 
             next();
         } else {
-            req.accessToken = accessToken;
-            req.refreshToken = refreshToken;
-            req.email = accessTokenData.decodedData.email;
+            req.user = {
+                _id: accessTokenData.decodedData._id,
+                email: accessTokenData.decodedData.email,
+                accessToken,
+                refreshToken,
+            };
+
             next();
         }
     } catch (e) {
