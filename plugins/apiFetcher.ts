@@ -1,12 +1,13 @@
-import { defineNuxtPlugin, useRuntimeConfig } from '#app';
 import { $fetch, type $Fetch, type SearchParameters } from 'ofetch';
+import { defineNuxtPlugin, useRuntimeConfig } from '#app';
 import type { IRequestPayload } from '~/types/fetch';
+import type { TUserTokensPair } from '~/stores/types/user';
+import { NotificationTypesEnum } from '~/stores/types/notification';
+
 import { useUserStore } from '~/stores/useUserStore';
 import { useNotificationStore } from '~/stores/useNotificationStore';
-import type { TUserTokensPair } from '~/types/user';
-import { NotificationTypesEnum } from '~/types/notification';
 
-let silentRoutes = ['/auth/check/'];
+let silentRoutes = ['auth/check/'];
 
 class ApiFetcher {
     private readonly _fetch: $Fetch;
@@ -26,6 +27,19 @@ class ApiFetcher {
         return this._fetch<T>(endpoint, {
             method: 'POST',
             ...payload,
+        });
+    }
+
+    async patch<T>(endpoint: string, payload?: IRequestPayload): Promise<T> {
+        return this._fetch<T>(endpoint, {
+            method: 'PATCH',
+            ...payload,
+        });
+    }
+
+    async delete<T>(endpoint: string): Promise<T> {
+        return this._fetch<T>(endpoint, {
+            method: 'DELETE',
         });
     }
 }

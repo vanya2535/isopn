@@ -30,6 +30,7 @@ onMounted(async () => {
 
 .title {
     font-size: 20rem;
+    color: $base300;
     cursor: default;
     user-select: none;
 
@@ -39,7 +40,7 @@ onMounted(async () => {
     }
 
     @include respond-to(mobile) {
-        font-size: 10rem;
+        font-size: 12rem;
     }
 }
 </style>

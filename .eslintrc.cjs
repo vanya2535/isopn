@@ -30,12 +30,13 @@ module.exports = {
             'off',
         ],
         'import/no-webpack-loader-syntax': 'off',
+        'import/no-named-as-default': 'off',
         'no-else-return': 0,
         'no-empty-function': 'error',
         'no-eq-null': 'error',
         'no-extra-parens': 'error',
         'no-labels': 'error',
-        'no-new': 'error',
+        'no-new': 'off',
         'no-new-func': 'error',
         'no-new-wrappers': 'error',
         'no-loss-of-precision': 'error',
@@ -61,6 +62,17 @@ module.exports = {
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/member-delimiter-style': ['error', {
+            multiline: {
+                delimiter: 'comma',
+                requireLast: true,
+            },
+            singleline: {
+                delimiter: 'comma',
+                requireLast: true,
+            },
+        }],
+        '@typescript-eslint/semi': ['error', 'always'],
         'no-useless-call': 'error',
         'no-useless-concat': 'error',
         'no-useless-return': 'error',
@@ -306,7 +318,6 @@ module.exports = {
             },
         ],
         'switch-colon-spacing': 'error',
-        // ECMAScript 6
         'arrow-body-style': [
             'error',
             'as-needed',
@@ -348,7 +359,6 @@ module.exports = {
             'error',
             'never',
         ],
-        // Vue linter optoins
         'vue/attribute-hyphenation': [
             'error',
             'always',

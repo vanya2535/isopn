@@ -1,5 +1,6 @@
-import { defineNuxtPlugin } from '#app';
 import type { Pinia } from 'pinia';
+
+import { defineNuxtPlugin } from '#app';
 import { useUserStore } from '~/stores/useUserStore';
 
 export default defineNuxtPlugin(async nuxtApp => {

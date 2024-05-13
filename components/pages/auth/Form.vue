@@ -1,100 +1,36 @@
 <script lang="ts" setup>
-import { AuthFormModesEnum } from './types';
-import type { IAuthData, TAuthFields } from '~/types/auth';
-import type { IAuthFormModeButton } from '~/types/constants';
-import { InputTypesEnum, ButtonTypesEnum } from '~/components/common/types';
-import { formTitles, formModeButtons, formModeClasses, formModeActions, requiredModeFormFields } from '~/assets/ts/constants/authForm';
-import type { IFetchErrorData } from '~/types/fetch';
-
-interface IAuthFormProps {
-    mode: AuthFormModesEnum
-    hideModeButtons?: boolean
-}
-
-type TAuthDataValidationErrors = Record<keyof TAuthFields, string>
+import type { IAuthFormProps } from './types';
+import { InputTypesEnum, ButtonTypesEnum } from '~/components/ui/types';
 
 const props = withDefaults(defineProps<IAuthFormProps>(), {
     hideModeButtons: false,
 });
 
-const route = useRoute();
-const router = useRouter();
+const {
+    title,
+    formClass,
+    modeButtons,
+    emailInputVisible,
+    passwordInputVisible,
+    submitPasswordInputVisible,
+} = useAuthForm(props);
 
-const formData = ref<IAuthData>({
-    email: '',
-    password: '',
-    submitPassword: '',
-    updateToken: route.query.token || '',
-});
+const {
+    formData,
+    formDataErrors,
+    dataLoading,
+    messageSended,
+    submitButtonDisabled,
 
-const formDataErrors = ref<TAuthDataValidationErrors>({
-    email: '',
-    password: '',
-    submitPassword: '',
-});
-
-const title = computed<string>(() => formTitles[props.mode]);
-const formClass = computed<string>(() => formModeClasses[props.mode]);
-const modeButtons = computed<IAuthFormModeButton[]>(() => formModeButtons.filter(({ mode }) => mode !== props.mode));
-
-const dataLoading = ref<boolean>(false);
-const messageSended = ref<boolean>(false);
-
-const isEmailInputVisible = computed<boolean>(() => [AuthFormModesEnum.LOGIN, AuthFormModesEnum.REGISTER, AuthFormModesEnum.RESTORE].includes(props.mode));
-const isPasswordInputVisible = computed<boolean>(() => [AuthFormModesEnum.LOGIN, AuthFormModesEnum.REGISTER, AuthFormModesEnum.RESTORE_CONFIRM].includes(props.mode));
-const isSubmitPasswordInputVisible = computed<boolean>(() => [AuthFormModesEnum.REGISTER, AuthFormModesEnum.RESTORE_CONFIRM].includes(props.mode));
-
-async function onFormSubmit() {
-    let requiredFilled = true;
-
-    requiredModeFormFields[props.mode].forEach((field: keyof TAuthFields) => {
-        if (!formData.value[field]) {
-            requiredFilled = false;
-            formDataErrors.value[field] = 'Поле обязательно для заполнения';
-        }
-    });
-
-    if (requiredModeFormFields[props.mode].includes('submitPassword') && formData.value.password !== formData.value.submitPassword) {
-        formDataErrors.value.submitPassword = 'Пароли не совпадают';
-        return;
-    }
-
-    if (!requiredFilled) {
-        return;
-    }
-
-    try {
-        dataLoading.value = true;
-        await formModeActions[props.mode](formData.value);
-
-        if ([AuthFormModesEnum.LOGIN, AuthFormModesEnum.RESTORE_CONFIRM].includes(props.mode)) {
-            router.push('/');
-        } else {
-            messageSended.value = true;
-        }
-    } catch (e) {
-        const res = e as IFetchErrorData<TAuthFields>;
-
-        if (res.errors) {
-            res.errors.forEach(({ path, msg }) => {
-                formDataErrors.value[path] = msg;
-            });
-        }
-    } finally {
-        dataLoading.value = false;
-    }
-}
-
-function resetError(path: keyof TAuthFields) {
-    formDataErrors.value[path] = '';
-}
+    onFormSubmit,
+    resetError,
+} = useAuthFormData(props);
 </script>
 
 
 <template>
     <form
         :class="[$style.Form, $style[formClass]]"
-        autocomplete="off"
         @submit.prevent="onFormSubmit"
     >
         <div :class="$style.left">
@@ -105,25 +41,24 @@ function resetError(path: keyof TAuthFields) {
 
         <div :class="$style.right">
             <template v-if="!messageSended">
-                <h2 :class="$style.title">
+                <h2 :class="[$style.title, 'form-title']">
                     {{ title }}
                 </h2>
 
                 <div>
-                    <CommonVInput
-                        v-if="isEmailInputVisible"
+                    <UiVInput
+                        v-if="emailInputVisible"
                         id="email"
                         v-model="formData.email"
                         :class="$style.input"
-                        :type="InputTypesEnum.TEXT"
                         :error="formDataErrors.email"
                         label="Адрес электронной почты"
                         autocomplete="email"
                         @input="resetError('email')"
                     />
 
-                    <CommonVInput
-                        v-if="isPasswordInputVisible"
+                    <UiVInput
+                        v-if="passwordInputVisible"
                         id="password"
                         v-model="formData.password"
                         :class="$style.input"
@@ -134,40 +69,40 @@ function resetError(path: keyof TAuthFields) {
                         @input="resetError('password')"
                     />
 
-                    <CommonVInput
-                        v-if="isSubmitPasswordInputVisible"
+                    <UiVInput
+                        v-if="submitPasswordInputVisible"
                         id="submitPassword"
                         v-model="formData.submitPassword"
                         :class="$style.input"
                         :type="InputTypesEnum.PASSWORD"
                         :error="formDataErrors.submitPassword"
                         label="Подтвердите пароль"
-                        autocomplete="off"
                         @input="resetError('submitPassword')"
                     />
                 </div>
 
-                <CommonVButton
+                <UiVButton
                     :class="$style.submit"
                     :type="ButtonTypesEnum.SUBMIT"
                     :loading="dataLoading"
+                    :disabled="submitButtonDisabled"
+                    primary
                 >
                     Подтвердить
-                </CommonVButton>
+                </UiVButton>
 
                 <div
-                    v-if="!hideModeButtons"
+                    v-if="!props.hideModeButtons"
                     :class="$style.buttons"
                 >
-                    <CommonVButton
+                    <UiVButton
                         v-for="button in modeButtons"
                         :key="button.mode"
                         :class="$style.button"
-                        without-bg
                         @click="$emit('change:mode', button.mode)"
                     >
                         {{ button.title }}
-                    </CommonVButton>
+                    </UiVButton>
                 </div>
             </template>
 
@@ -270,11 +205,6 @@ function resetError(path: keyof TAuthFields) {
     @include respond-to(mobile) {
         border-radius: 0 0 .6rem .6rem;
     }
-}
-
-.title {
-    margin-bottom: 1rem;
-    color: $base400;
 }
 
 .input {

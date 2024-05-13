@@ -6,7 +6,14 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             BACKEND_URL: process.env.BACKEND_URL,
+            YMAPS_KEY: process.env.YMAPS_KEY,
         },
+    },
+
+    imports: {
+        dirs: [
+            'composables/**',
+        ],
     },
 
     modules: [

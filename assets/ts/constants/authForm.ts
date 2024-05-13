@@ -1,7 +1,8 @@
-import { useUserStore } from '~/stores/useUserStore';
-import type { IAuthData, TAuthFields, TAuthFunction } from '~/types/auth';
+import type { IAuthData, TAuthFields, TAuthFunction, TAuthFunctionVoid } from '~/types/auth';
 import { AuthFormModesEnum } from '~/components/pages/auth/types';
 import type { IAuthFormModeButton } from '~/types/constants';
+
+import { useUserStore } from '~/stores/useUserStore';
 
 export const formTitles: Record<AuthFormModesEnum, string> = {
     [AuthFormModesEnum.LOGIN]: 'Войти',
@@ -32,7 +33,7 @@ export const formModeClasses: Record<AuthFormModesEnum, string> = {
     [AuthFormModesEnum.RESTORE_CONFIRM]: '_restoreConfirm',
 };
 
-export const formModeActions: Record<AuthFormModesEnum, TAuthFunction> = {
+export const formModeActions: Record<AuthFormModesEnum, TAuthFunction | TAuthFunctionVoid> = {
     [AuthFormModesEnum.LOGIN]: async ({ email, password }: IAuthData) => {
         const userStore = useUserStore();
         return userStore.login({ email, password });
@@ -54,7 +55,7 @@ export const formModeActions: Record<AuthFormModesEnum, TAuthFunction> = {
     },
 };
 
-export const requiredModeFormFields: Record<AuthFormModesEnum, (keyof TAuthFields)[]> = {
+export const requiredModeFormFields: Record<AuthFormModesEnum, Array<keyof TAuthFields>> = {
     [AuthFormModesEnum.LOGIN]: ['email', 'password'],
     [AuthFormModesEnum.REGISTER]: ['email', 'password', 'submitPassword'],
     [AuthFormModesEnum.RESTORE]: ['email'],

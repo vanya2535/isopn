@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import type { LocationQueryValue } from 'vue-router';
 import type { TAuthFields, TLoginData, TRestoreConfirmData, TRestoreData } from '~/types/auth';
-import type { TUserData, TUserTokensPair } from '~/types/user';
+import type { TUserData, TUserTokensPair } from '~/stores/types/user';
 import type { IFetchError, IFetchErrorData } from '~/types/fetch';
-import { NotificationTypesEnum } from '~/types/notification';
+import { NotificationTypesEnum } from '~/stores/types/notification';
 
 export const useUserStore = defineStore('user', () => {
     const { $apiFetcher } = useNuxtApp();
@@ -11,7 +11,7 @@ export const useUserStore = defineStore('user', () => {
     const notificationStore = useNotificationStore();
 
     const accessTokenCookie = useCookie('accessToken', {
-        maxAge: 60,
+        maxAge: 172800,
     });
     const refreshTokenCookie = useCookie('refreshToken', {
         maxAge: 172800,

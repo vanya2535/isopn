@@ -1,7 +1,8 @@
 @import "../shared/variables";
+@import "../mixins/media";
 
 .page {
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
 }
 
@@ -26,5 +27,24 @@
 @keyframes to-right {
     100% {
         left: 120%;
+    }
+}
+
+.form-title {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+    color: $base400;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 128rem;
+
+    @include respond-to(mobile) {
+        margin: 0;
+        padding: 0 1.6rem;
+        max-width: 100%;
     }
 }

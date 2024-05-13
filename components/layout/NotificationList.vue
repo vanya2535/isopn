@@ -23,6 +23,7 @@ const notificationStore = useNotificationStore();
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    background-color: transparent;
 }
 
 .notification {
