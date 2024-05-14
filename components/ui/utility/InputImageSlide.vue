@@ -3,7 +3,7 @@ import type { ISlide } from '~/components/ui/types';
 
 interface IInputImageSlideProps {
     slide: ISlide,
-}
+};
 
 const props = defineProps<IInputImageSlideProps>();
 </script>

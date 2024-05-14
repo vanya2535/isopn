@@ -5,13 +5,13 @@ export enum InputTypesEnum {
     TEXT = 'text',
     PASSWORD = 'password',
     NUMBER = 'number',
-}
+};
 
 // VButton
 export enum ButtonTypesEnum {
     BUTTON = 'button',
     SUBMIT = 'submit'
-}
+};
 
 // VInputImage
 export interface ISlide {
@@ -23,4 +23,5 @@ export interface ISlide {
 export enum ModalPositionsEnum {
     LEFT = 'left',
     RIGHT = 'right',
+    CENTER = 'center',
 };

@@ -9,7 +9,7 @@ interface IButtonProps {
     primary?: boolean,
     outlined?: boolean,
     squared?: boolean,
-}
+};
 
 const props = withDefaults(defineProps<IButtonProps>(), {
     type: ButtonTypesEnum.BUTTON,

@@ -20,8 +20,10 @@ const realtyStore = useRealtyStore();
 
 const loaded = ref<boolean>(false);
 const dataLoading = ref<boolean>(false);
-const modalOpened = ref<boolean>(false);
 const realtyToUpdate = ref<IRealty | null>(null);
+const formModalOpened = ref<boolean>(false);
+const galleryImages = ref<string[]>([]);
+const galleryModalOpened = ref<boolean>(false);
 
 useAsyncData(async () => {
     if (process.client) {
@@ -39,7 +41,7 @@ function getItemZIndex(index: number) {
 
 function onRealtyUpdate(realty: IRealty) {
     realtyToUpdate.value = cloneDeep(realty);
-    modalOpened.value = true;
+    formModalOpened.value = true;
 }
 
 async function onMoreButtonClick() {
@@ -49,6 +51,11 @@ async function onMoreButtonClick() {
     } catch (e) {} finally {
         dataLoading.value = false;
     }
+}
+
+function onItemGalleryOpen(images: string[]) {
+    galleryImages.value = images;
+    galleryModalOpened.value = true;
 }
 </script>
 
@@ -63,6 +70,7 @@ async function onMoreButtonClick() {
                     :key="realty._id"
                     :realty="realty"
                     :style="`z-index: ${getItemZIndex(index)}`"
+                    @gallery="onItemGalleryOpen"
                     @update="onRealtyUpdate"
                     @remove="realtyStore.remove($event)"
                 />
@@ -92,10 +100,18 @@ async function onMoreButtonClick() {
 
         <transition name="fade">
             <PagesRealtyFormModal
-                v-if="modalOpened"
+                v-if="formModalOpened"
                 :mode="RealtyFormModesEnum.UPDATE"
                 :realty="realtyToUpdate"
-                @close="modalOpened = false"
+                @close="formModalOpened = false"
+            />
+        </transition>
+
+        <transition name="fade">
+            <CommonGalleryModal
+                v-if="galleryModalOpened"
+                :images="galleryImages"
+                @close="galleryModalOpened = false"
             />
         </transition>
     </main>

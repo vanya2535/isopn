@@ -72,6 +72,9 @@ export const useUserStore = defineStore('user', () => {
         accessToken.value = '';
         refreshToken.value = '';
 
+        const realtyStore = useRealtyStore();
+        realtyStore.clear();
+
         router.push('/auth');
     }
 

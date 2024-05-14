@@ -3,11 +3,11 @@ import { ModalPositionsEnum } from './types';
 
 interface IModalProps {
     position?: ModalPositionsEnum,
-}
+};
 
 interface IModalEmits {
     (e: 'close'): void,
-}
+};
 
 const props = withDefaults(defineProps<IModalProps>(), {
     position: ModalPositionsEnum.LEFT,
@@ -146,6 +146,40 @@ onBeforeUnmount(() => {
 
         @include respond-to(mobile) {
             border-radius: .8rem .8rem 0 0;
+            transform: translateY(100%);
+        }
+    }
+
+    &._center {
+        left: 50%;
+        bottom: 50%;
+        border-radius: .8rem;
+        width: 90%;
+        height: 70%;
+        max-width: 90%;
+        transform: translate(-50%, -100%);
+
+        .inner {
+            @include respond-to(desktop) {
+                padding-bottom: 0;
+            }
+        }
+
+        &._opened {
+            transform: translate(-50%, 50%);
+
+            @include respond-to(mobile) {
+                transform: none;
+            }
+        }
+
+        @include respond-to(mobile) {
+            left: 0;
+            bottom: 0;
+            border-radius: .8rem .8rem 0 0;
+            width: 100%;
+            height: auto;
+            max-width: 100%;
             transform: translateY(100%);
         }
     }

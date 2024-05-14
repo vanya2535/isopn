@@ -12,11 +12,11 @@ interface IInputFileProps {
     disabled?: boolean,
     count?: number,
     maxCount?: number,
-}
+};
 
 interface IInputFileEmits {
     (e: 'input', value: File[]): void,
-}
+};
 
 const props = withDefaults(defineProps<IInputFileProps>(), {
     accept: '*',

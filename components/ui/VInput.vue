@@ -13,11 +13,11 @@ interface IInputProps {
     float?: boolean,
     sm?: boolean,
     withSubmitButton?: boolean,
-}
+};
 
 interface IInputEmits {
     (e: 'submit', value: string | number | undefined): void,
-}
+};
 
 const props = withDefaults(defineProps<IInputProps>(), {
     label: '',

@@ -12,7 +12,7 @@ interface IInputImageProps {
 interface IInputImageEmits {
     (e: 'input', value: File[]): void,
     (e: 'remove', index: number): void,
-}
+};
 
 const props = defineProps<IInputImageProps>();
 const emit = defineEmits<IInputImageEmits>();

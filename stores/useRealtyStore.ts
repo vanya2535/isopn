@@ -22,6 +22,8 @@ export const useRealtyStore = defineStore('realty', () => {
 
             realties.value.push(res.result);
 
+            count.value++;
+            getStats();
             return Promise.resolve(res.result);
         } catch (e) {
             console.error('store/realty/create: ', e);
@@ -55,6 +57,7 @@ export const useRealtyStore = defineStore('realty', () => {
             const realtyIndex = realties.value.findIndex((realty: IRealty) => realty._id === id);
             realties.value[realtyIndex] = res.result;
 
+            getStats();
             return Promise.resolve(res.result);
         } catch (e) {
             console.error('store/realty/update: ', e);
@@ -64,16 +67,24 @@ export const useRealtyStore = defineStore('realty', () => {
 
     async function remove(id: string): Promise<void | IFetchErrorData<void>> {
         try {
-            const res = <TRequestResponse<void>> await $apiFetcher.delete(`/realty/delete/${id}/`);
+            // const res = <TRequestResponse<void>> await $apiFetcher.delete(`/realty/delete/${id}/`);
 
             const realtyIndex = realties.value.findIndex((realty: IRealty) => realty._id === id);
             realties.value.splice(realtyIndex, 1);
 
-            return Promise.resolve(res.result);
+            count.value--;
+            getStats();
+            // return Promise.resolve(res.result);
         } catch (e) {
             console.error('store/realty/remove: ', e);
             return Promise.reject((e as IFetchError<void>).data);
         }
+    }
+
+    function clear() {
+        realties.value.splice(0);
+        offset.value = 0;
+        count.value = 0;
     }
 
     async function getStats(): Promise<IRealtyStats | IFetchErrorData<void>> {
@@ -99,6 +110,7 @@ export const useRealtyStore = defineStore('realty', () => {
         get,
         update,
         remove,
+        clear,
         getStats,
     };
 });

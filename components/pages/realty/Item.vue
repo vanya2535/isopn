@@ -6,7 +6,7 @@ import { getRealtyTitle } from '~/assets/ts/utils/realtyUtils';
 
 interface IRealtyItemProps {
     realty: IRealty,
-}
+};
 
 const props = defineProps<IRealtyItemProps>();
 
@@ -20,6 +20,7 @@ useClickOutside(itemRef, () => {
 const realtyTitle = computed<string>(() => getRealtyTitle(props.realty.rooms));
 const realtyRooms = computed<string[]>(() => props.realty.rooms?.map(({ name, area }) => `${name} - ${splitThousands(area)} м²`) || []);
 const realtyAdvantages = computed<string>(() => props.realty.advantages?.map(({ name }) => name).join(', ') || '');
+const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.map(({ name }) => name).join(', ') || '');
 </script>
 
 <template>
@@ -57,6 +58,7 @@ const realtyAdvantages = computed<string>(() => props.realty.advantages?.map(({ 
             <PagesRealtyUtilityItemSlider
                 :class="$style.slider"
                 :images="props.realty.images"
+                @click="$emit('gallery', props.realty.images)"
             />
 
             <div :class="$style.content">
@@ -103,6 +105,13 @@ const realtyAdvantages = computed<string>(() => props.realty.advantages?.map(({ 
                 :class="$style.section"
                 title="Преимущества"
                 :value="realtyAdvantages"
+            />
+
+            <PagesRealtyUtilityItemSection
+                v-if="realtyDisadvantages"
+                :class="$style.section"
+                title="Недостатки"
+                :value="realtyDisadvantages"
             />
 
             <PagesRealtyUtilityItemSection

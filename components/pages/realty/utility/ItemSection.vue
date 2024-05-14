@@ -3,7 +3,7 @@ interface IItemSectionProps {
     title: string,
     value: string | string[],
     row?: boolean,
-}
+};
 
 const props = withDefaults(defineProps<IItemSectionProps>(), {
     row: false,
@@ -53,12 +53,12 @@ const multiple = computed<boolean>(() => Array.isArray(props.value));
 .title {
     margin-bottom: .4rem;
     font-size: 1.4rem;
-    line-height: 1;
+    line-height: 1.6rem;
 }
 
 .value {
     font-size: 1.2rem;
-    line-height: 1;
+    line-height: 1.4rem;
 
     &:not(:last-child) {
         margin-bottom: .2rem;

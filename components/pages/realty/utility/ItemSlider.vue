@@ -7,7 +7,7 @@ import { getLoadedImageSrc } from '~/assets/ts/utils/fileUtils';
 
 interface IIremSliderProps {
     images?: string[],
-}
+};
 
 const props = withDefaults(defineProps<IIremSliderProps>(), {
     images: () => [],
@@ -103,7 +103,7 @@ onMounted(() => {
     position: relative;
     overflow: hidden;
     margin-bottom: 2rem;
-    border: 1px solid $base400;
+    border: .1rem solid $base400;
     border-radius: .8rem;
     height: 18rem;
 

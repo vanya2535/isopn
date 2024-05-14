@@ -1,3 +1,8 @@
+<script lang="ts" setup>
+const error = useError();
+</script>
+
+
 <template>
     <main :class="[$style.Error, 'page']">
         <nuxt-link to="/" :class="$style.title">
@@ -5,7 +10,7 @@
         </nuxt-link>
 
         <h1 :class="$style.subtitle">
-            404
+            {{ error.statusCode }}
         </h1>
     </main>
 </template>

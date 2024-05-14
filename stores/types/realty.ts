@@ -23,6 +23,7 @@ export interface IRealty {
     location?: string,
     coords: LngLat,
     advantages?: IRealtyAdvantage[],
+    disadvantages?: IRealtyAdvantage[],
 };
 
 export interface IRealtyInput extends Omit<IRealty, '_id' | 'images'> {
@@ -42,7 +43,7 @@ export type TRealtyRoomError = Record<RealtyRoomRequiredFieldsEnum, string>;
 export interface TRealtyInputErrors {
     price: string,
     rooms: Record<number, TRealtyRoomError>,
-}
+};
 
 export type TRealtyFunctionPayload = {
     id?: string,
@@ -56,4 +57,6 @@ export type TRealtyStat = Record<number, number>;
 export interface IRealtyStats {
     price: TRealtyStat,
     rooms: TRealtyStat,
+    allPrice: TRealtyStat,
+    allRooms: TRealtyStat,
 };

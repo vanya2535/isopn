@@ -17,6 +17,7 @@ export const useRealtyFormData = (props: IRealtyFormProps, emit: IRealtyFormEmit
         location: props.realty?.location || '',
         coords: props.realty?.coords || baseCoords,
         advantages: props.realty?.advantages || [],
+        disadvantages: props.realty?.disadvantages || [],
     });
 
     const formDataErrors = ref<TRealtyInputErrors>({
@@ -38,7 +39,7 @@ export const useRealtyFormData = (props: IRealtyFormProps, emit: IRealtyFormEmit
 
     let roomId = 1;
     function onAddRoomButtonClick() {
-        formData.value.rooms.push({
+        formData.value.rooms?.push({
             id: roomId++,
             name: '',
             area: 0,
@@ -47,7 +48,7 @@ export const useRealtyFormData = (props: IRealtyFormProps, emit: IRealtyFormEmit
     }
 
     function onRemoveRoomButtonClick(index: number) {
-        formData.value.rooms.splice(index, 1);
+        formData.value.rooms?.splice(index, 1);
         delete formDataErrors.value.rooms[index];
     }
 
@@ -71,7 +72,7 @@ export const useRealtyFormData = (props: IRealtyFormProps, emit: IRealtyFormEmit
             requiredFilled = false;
         }
 
-        formData.value.rooms.forEach((room: IRealtyRoom) => {
+        formData.value.rooms?.forEach((room: IRealtyRoom) => {
             if (!room.name) {
                 formDataErrors.value.rooms[room.id] = formDataErrors.value.rooms[room.id] || {};
                 formDataErrors.value.rooms[room.id].name = requiredErrorText;

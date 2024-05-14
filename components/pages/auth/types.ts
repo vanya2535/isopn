@@ -3,9 +3,9 @@ export enum AuthFormModesEnum {
     REGISTER = 'register',
     RESTORE = 'restore',
     RESTORE_CONFIRM = 'restoreConfirm',
-}
+};
 
 export interface IAuthFormProps {
     mode: AuthFormModesEnum,
     hideModeButtons?: boolean,
-}
+};

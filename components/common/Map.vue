@@ -4,11 +4,11 @@ import type { IMapGeoData } from '~/types/map';
 
 interface ICommonMapProps {
     realty: IRealty | IRealtyInput,
-}
+};
 
 interface ICommonMapEmits {
     (e: 'input', geoData: IMapGeoData): void,
-}
+};
 
 const props = defineProps<ICommonMapProps>();
 const emit = defineEmits<ICommonMapEmits>();

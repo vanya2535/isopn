@@ -1,6 +1,13 @@
 <script lang="ts" setup>
 import type { IRealtyAdvantage } from '~/stores/types/realty';
 
+interface IRealtyAdvantagesInputProps {
+    id: string,
+    label: string,
+};
+
+const props = defineProps<IRealtyAdvantagesInputProps>();
+
 const modelValue = defineModel<IRealtyAdvantage[]>();
 
 let tagId = 1;
@@ -19,9 +26,9 @@ function onTagClick(index: number) {
 <template>
     <div :class="$style.AdvantagesInput">
         <UiVInput
-            id="advantage"
+            :id="props.id"
             :class="$style.input"
-            label="Преимущество"
+            :label="props.label"
             sm
             with-submit-button
             @submit="onTagSubmit"

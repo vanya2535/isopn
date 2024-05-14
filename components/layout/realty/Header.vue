@@ -71,7 +71,7 @@ onMounted(() => {
 
 <style lang="scss" module>
 .Header {
-    border-bottom: 1px solid $base400;
+    border-bottom: .1rem solid $base400;
     padding: 1rem 0;
     height: $header-height;
     background-color: $base0;

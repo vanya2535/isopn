@@ -125,7 +125,16 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
         </UiVButton>
 
         <PagesRealtyAdvantagesInput
+            id="advantages"
             v-model="formData.advantages"
+            label="Преимущества"
+            :class="$style.tags"
+        />
+
+        <PagesRealtyAdvantagesInput
+            id="disadvantages"
+            v-model="formData.disadvantages"
+            label="Недостатки"
             :class="$style.tags"
         />
 
@@ -160,6 +169,7 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
 
 .title {
     position: relative;
+    display: inline-block;
     min-width: 14.4rem;
     max-width: 16.4rem;
 }

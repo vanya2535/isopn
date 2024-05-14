@@ -1,46 +1,13 @@
 <script lang="ts" setup>
-import type { ChartItem } from 'chart.js/auto';
-
-import Chart from 'chart.js/auto';
-import { splitThousands } from '~/assets/ts/utils/numberUtils';
+import { ChartDataTypesEnum } from './types';
 import { ModalPositionsEnum } from '~/components/ui/types';
 import type { IRealtyStats } from '~/stores/types/realty';
 
-
 interface IRealtyChartModalProps {
     stats: IRealtyStats,
-}
+};
 
 const props = defineProps<IRealtyChartModalProps>();
-
-const priceChartRef = ref<ChartItem | null>(null);
-const roomsChartRef = ref<ChartItem | null>(null);
-
-onMounted(() => {
-    new Chart(priceChartRef.value as ChartItem, {
-        type: 'pie',
-        data: {
-            labels: Object.keys(props.stats.price).map(segment => `около ${splitThousands(Number(segment))} млн. ₽`),
-
-            datasets: [{
-                data: Object.values(props.stats.price),
-            }],
-        },
-    });
-
-    new Chart(roomsChartRef.value as ChartItem, {
-        type: 'pie',
-        data: {
-            labels: Object.keys(props.stats.rooms).map(count => Number(count)
-                ? `${splitThousands(Number(count))}-комнатные`
-                : 'Комнаты не указаны'),
-
-            datasets: [{
-                data: Object.values(props.stats.rooms),
-            }],
-        },
-    });
-});
 </script>
 
 <template>
@@ -53,27 +20,37 @@ onMounted(() => {
             Ваши предпочтения
         </h2>
 
-        <div :class="$style.section">
-            <h3 :class="$style.sectionTitle">
-                Ценовой диапазон:
-            </h3>
+        <PagesRealtyUtilityChart
+            :class="$style.section"
+            label="Ценовой диапазон"
+            :stat="props.stats.price"
+            :type="ChartDataTypesEnum.PRICE"
+        />
 
-            <canvas
-                ref="priceChartRef"
-                :class="$style.chart"
-            />
-        </div>
+        <PagesRealtyUtilityChart
+            :class="$style.section"
+            label="Комнатность"
+            :stat="props.stats.rooms"
+            :type="ChartDataTypesEnum.ROOMS"
+        />
 
-        <div :class="$style.section">
-            <h3 :class="$style.sectionTitle">
-                Комнатность:
-            </h3>
+        <h2 :class="$style.title">
+            Предпочтения пользователей
+        </h2>
 
-            <canvas
-                ref="roomsChartRef"
-                :class="$style.chart"
-            />
-        </div>
+        <PagesRealtyUtilityChart
+            :class="$style.section"
+            label="Ценовой диапазон"
+            :stat="props.stats.allPrice"
+            :type="ChartDataTypesEnum.PRICE"
+        />
+
+        <PagesRealtyUtilityChart
+            :class="$style.section"
+            label="Ценовой диапазон"
+            :stat="props.stats.allRooms"
+            :type="ChartDataTypesEnum.ROOMS"
+        />
     </UiVModal>
 </template>
 
@@ -87,20 +64,10 @@ onMounted(() => {
     font-weight: 700;
     font-size: 1.6rem;
     line-height: 1.8rem;
+    color: $base400;
 }
 
 .section {
     margin-bottom: 4rem;
-}
-
-.sectionTitle {
-    margin-bottom: 1rem;
-    font-weight: 500;
-    font-size: 1.4rem;
-    line-height: 1.6rem;
-}
-
-.chart {
-    margin: 0 auto;
 }
 </style>

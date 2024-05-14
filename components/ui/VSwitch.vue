@@ -2,7 +2,7 @@
 interface ISwitchProps {
     id: string,
     label?: string,
-}
+};
 
 const props = withDefaults(defineProps<ISwitchProps>(), {
     label: '',
