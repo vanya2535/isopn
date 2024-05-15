@@ -11,6 +11,7 @@ definePageMeta({
 
 const config = useRuntimeConfig();
 useHead({
+    title: 'ISOPN / Объекты недвижимости',
     script: [{
         src: `https://api-maps.yandex.ru/v3/?apikey=${config.public.YMAPS_KEY}&lang=ru_RU`,
     }],

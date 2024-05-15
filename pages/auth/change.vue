@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { AuthFormModesEnum } from '~/components/pages/auth/types';
 
+useHead({ title: 'ISOPN' });
+
 const mode = ref<AuthFormModesEnum>(AuthFormModesEnum.RESTORE_CONFIRM);
 </script>
 

@@ -3,6 +3,8 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 
+useHead({ title: 'ISOPN' });
+
 onMounted(async () => {
     try {
         await userStore.confirm(route.query.token);
