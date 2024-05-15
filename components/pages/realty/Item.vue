@@ -31,28 +31,42 @@ const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.m
         <div :class="$style.visible">
             <div :class="$style.actions">
                 <button
-                    :class="$style.button"
+                    :class="[$style.button, {[$style._hidden]: !props.realty.images?.length}]"
                     type="button"
                     tabindex="1"
-                    @click="$emit('update', props.realty)"
+                    @click="$emit('gallery', props.realty.images)"
                 >
                     <SvgIcon
                         :class="$style.icon"
-                        name="edit"
+                        name="resize"
                     />
                 </button>
 
-                <button
-                    :class="$style.button"
-                    type="button"
-                    tabindex="1"
-                    @click="$emit('remove', props.realty._id)"
-                >
-                    <SvgIcon
-                        :class="$style.icon"
-                        name="trash"
-                    />
-                </button>
+                <div :class="$style.actionsPart">
+                    <button
+                        :class="$style.button"
+                        type="button"
+                        tabindex="1"
+                        @click="$emit('update', props.realty)"
+                    >
+                        <SvgIcon
+                            :class="$style.icon"
+                            name="edit"
+                        />
+                    </button>
+
+                    <button
+                        :class="$style.button"
+                        type="button"
+                        tabindex="1"
+                        @click="$emit('remove', props.realty._id)"
+                    >
+                        <SvgIcon
+                            :class="$style.icon"
+                            name="trash"
+                        />
+                    </button>
+                </div>
             </div>
 
             <PagesRealtyUtilityItemSlider
@@ -171,16 +185,22 @@ const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.m
 .actions {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-bottom: 1rem;
+}
+
+.actionsPart {
+    display: flex;
+    column-gap: .6rem;
+    align-items: center;
 }
 
 .button {
     width: 2rem;
     height: 2rem;
 
-    &:not(:last-child) {
-        margin-right: .6rem;
+    &._hidden {
+        visibility: hidden;
     }
 
     &:hover .icon,

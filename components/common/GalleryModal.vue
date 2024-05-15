@@ -46,11 +46,11 @@ onMounted(() => {
 
 .slider {
     overflow: hidden;
-    border-radius: .8rem;
 }
 
 .slider,
 .image {
+    border-radius: .8rem;
     width: 100%;
     height: 100%;
 
