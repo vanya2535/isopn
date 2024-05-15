@@ -55,7 +55,7 @@ onMounted(() => {
     height: 100%;
 
     @include respond-to(mobile) {
-        max-height: 40rem;
+        height: 40rem;
     }
 }
 </style>
