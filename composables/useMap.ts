@@ -19,7 +19,8 @@ export const useMap = (draggable = false, pinCoords = baseCoords) => {
             text: coords.join(','),
         });
 
-        geoData.value.location = `${locations[0].properties.description}, ${locations[0].properties.name}`;
+        const description = locations[0].properties.description ? `${locations[0].properties.description}, ` : '';
+        geoData.value.location = `${description}${locations[0].properties.name}`;
         geoData.value.coords = coords;
     }
 

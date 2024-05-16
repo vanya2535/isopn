@@ -1,3 +1,5 @@
+@import './mixins/media';
+
 *,
 *:before,
 *:after {
@@ -17,8 +19,12 @@ ol[class] {
 
 html {
 	font-family: Comfortaa, sans-serif;
-	font-size: 10px;
+	font-size: 0.5vw;
 	text-rendering: optimizespeed;
+
+	@include respond-to(mobile) {
+		font-size: 10px;
+	}
 }
 
 a,

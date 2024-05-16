@@ -47,7 +47,7 @@ const props = defineProps<IRealtyChartModalProps>();
 
         <PagesRealtyUtilityChart
             :class="$style.section"
-            label="Ценовой диапазон"
+            label="Комнатность"
             :stat="props.stats.allRooms"
             :type="ChartDataTypesEnum.ROOMS"
         />

@@ -128,10 +128,12 @@ function onInputKeydown(event: KeyboardEvent) {
 }
 
 function onSubmitButtonClick() {
-    emit('submit', modelValue.value);
+    if (modelValue.value) {
+        emit('submit', modelValue.value);
 
-    modelValue.value = '';
-    inputValue.value = '';
+        modelValue.value = '';
+        inputValue.value = '';
+    }
 }
 </script>
 
