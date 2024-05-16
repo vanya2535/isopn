@@ -48,8 +48,14 @@ export const useRealtyFormData = (props: IRealtyFormProps, emit: IRealtyFormEmit
     }
 
     function onRemoveRoomButtonClick(index: number) {
-        formData.value.rooms?.splice(index, 1);
-        delete formDataErrors.value.rooms[index];
+        if (formData.value.rooms) {
+            const id = formData.value.rooms[index]?.id;
+            if (id) {
+                delete formDataErrors.value.rooms[id];
+            }
+
+            formData.value.rooms.splice(index, 1);
+        }
     }
 
     function resetRoomError(id: number, key: keyof TRealtyRoomError) {
@@ -92,9 +98,7 @@ export const useRealtyFormData = (props: IRealtyFormProps, emit: IRealtyFormEmit
         try {
             dataLoading.value = true;
             await formModeActions[props.mode]({ id: props.realty?._id, input: formData.value });
-        } catch (e) {
-            //
-        } finally {
+        } catch (e) {} finally {
             dataLoading.value = false;
             emit('complete');
         }

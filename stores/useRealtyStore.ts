@@ -67,14 +67,14 @@ export const useRealtyStore = defineStore('realty', () => {
 
     async function remove(id: string): Promise<void | IFetchErrorData<void>> {
         try {
-            // const res = <TRequestResponse<void>> await $apiFetcher.delete(`/realty/delete/${id}/`);
+            const res = <TRequestResponse<void>> await $apiFetcher.delete(`/realty/delete/${id}/`);
 
             const realtyIndex = realties.value.findIndex((realty: IRealty) => realty._id === id);
             realties.value.splice(realtyIndex, 1);
 
             count.value--;
             getStats();
-            // return Promise.resolve(res.result);
+            return Promise.resolve(res.result);
         } catch (e) {
             console.error('store/realty/remove: ', e);
             return Promise.reject((e as IFetchError<void>).data);
