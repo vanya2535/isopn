@@ -111,7 +111,7 @@ const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.m
                 <PagesRealtyUtilityItemSection
                     v-if="realtyRooms.length"
                     :class="$style.section"
-                    title="Комнаты"
+                    title="Помещения"
                     :value="realtyRooms"
                 />
 

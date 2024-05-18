@@ -17,7 +17,7 @@ const props = defineProps<IChartProps>();
 
 const dataMapCallbacks = {
     [ChartDataTypesEnum.PRICE]: (segment: string) => `около ${splitThousands(Number(segment))} млн. ₽`,
-    [ChartDataTypesEnum.ROOMS]: (count: string) => Number(count) ? `${splitThousands(Number(count))}-комнатные` : 'Комнаты не указаны',
+    [ChartDataTypesEnum.ROOMS]: (count: string) => Number(count) ? `${splitThousands(Number(count))}-комнатные` : 'Комнатность не указана',
 };
 
 const chartRef = ref<ChartItem | null>(null);

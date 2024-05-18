@@ -26,13 +26,12 @@ const multiple = computed<boolean>(() => Array.isArray(props.value));
         </p>
 
         <template v-else>
-            <p :class="$style.value">
-                <span
-                    v-for="(item, index) in props.value"
-                    :key="index"
-                >
-                    {{ item }}
-                </span>
+            <p
+                v-for="(item, index) in props.value"
+                :key="index"
+                :class="$style.value"
+            >
+                {{ item }}
             </p>
         </template>
     </div>
