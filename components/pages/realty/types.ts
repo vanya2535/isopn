@@ -20,3 +20,9 @@ export enum ChartDataTypesEnum {
     PRICE = 'price',
     ROOMS = 'rooms',
 };
+
+// AdvantagesInput
+export enum AdvantagesInputIdsEnum {
+    ADVANTAGES = 'advantages',
+    DISADVANTAGES = 'disadvantages',
+};

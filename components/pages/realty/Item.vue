@@ -99,41 +99,43 @@ const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.m
             v-if="props.realty.floor || realtyRooms.length || realtyAdvantages || props.realty.location"
             :class="$style.hidden"
         >
-            <PagesRealtyUtilityItemSection
-                v-if="props.realty.floor"
-                :class="$style.section"
-                title="Этаж"
-                :value="splitThousands(props.realty.floor)"
-                row
-            />
+            <div :class="$style.hiddenContent">
+                <PagesRealtyUtilityItemSection
+                    v-if="props.realty.floor"
+                    :class="$style.section"
+                    title="Этаж"
+                    :value="splitThousands(props.realty.floor)"
+                    row
+                />
 
-            <PagesRealtyUtilityItemSection
-                v-if="realtyRooms.length"
-                :class="$style.section"
-                title="Комнаты"
-                :value="realtyRooms"
-            />
+                <PagesRealtyUtilityItemSection
+                    v-if="realtyRooms.length"
+                    :class="$style.section"
+                    title="Комнаты"
+                    :value="realtyRooms"
+                />
 
-            <PagesRealtyUtilityItemSection
-                v-if="realtyAdvantages"
-                :class="$style.section"
-                title="Преимущества"
-                :value="realtyAdvantages"
-            />
+                <PagesRealtyUtilityItemSection
+                    v-if="realtyAdvantages"
+                    :class="$style.section"
+                    title="Преимущества"
+                    :value="realtyAdvantages"
+                />
 
-            <PagesRealtyUtilityItemSection
-                v-if="realtyDisadvantages"
-                :class="$style.section"
-                title="Недостатки"
-                :value="realtyDisadvantages"
-            />
+                <PagesRealtyUtilityItemSection
+                    v-if="realtyDisadvantages"
+                    :class="$style.section"
+                    title="Недостатки"
+                    :value="realtyDisadvantages"
+                />
 
-            <PagesRealtyUtilityItemSection
-                v-if="props.realty.location"
-                :class="$style.section"
-                title="Местоположение"
-                :value="props.realty.location"
-            />
+                <PagesRealtyUtilityItemSection
+                    v-if="props.realty.location"
+                    :class="$style.section"
+                    title="Местоположение"
+                    :value="props.realty.location"
+                />
+            </div>
 
             <button
                 :class="$style.bottomButton"
@@ -275,14 +277,25 @@ const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.m
     left: 0;
     bottom: 0;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     border: .1rem solid $base400;
     border-top: 0;
     border-radius: 0 0 .6rem .6rem;
     padding: 1.6rem 1rem 3.6rem;
     width: 100%;
+    max-height: 100%;
     transform: translateY(2.5rem);
     transition: transform 0.3s ease;
+}
+
+.hiddenContent {
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .section:not(:first-child) {

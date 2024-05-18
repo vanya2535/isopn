@@ -68,6 +68,7 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
                 id="floor"
                 v-model="formData.floor"
                 :type="InputTypesEnum.NUMBER"
+                :max-value="1000"
                 label="Этаж"
             />
         </div>
@@ -86,6 +87,7 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
                     :id="`roomName_${index}`"
                     v-model="formData.rooms[index].name"
                     :error="formDataErrors.rooms[room.id]?.name"
+                    :maxlength="25"
                     label="Название"
                     @input="resetRoomError(room.id, 'name')"
                 />
@@ -95,6 +97,7 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
                     v-model="formData.rooms[index].area"
                     :type="InputTypesEnum.NUMBER"
                     :error="formDataErrors.rooms[room.id]?.area"
+                    :max-value="1000"
                     label="Площадь, м²"
                     float
                     @input="resetRoomError(room.id, 'area')"
@@ -103,7 +106,7 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
                 <UiVSwitch
                     :id="`roomLiving_${room.id}`"
                     v-model="formData.rooms[index].living"
-                    label="Жилая"
+                    label="Жилое"
                 />
 
                 <UiVButton
@@ -116,18 +119,20 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
         </transition-group>
 
         <UiVButton
+            :disabled="formData.rooms.length >= 10"
             :class="$style.button"
             outlined
             icon="plus"
             @click="onAddRoomButtonClick"
         >
-            Добавить комнату
+            Добавить помещение
         </UiVButton>
 
         <PagesRealtyAdvantagesInput
             id="advantages"
             v-model="formData.advantages"
             label="Преимущества"
+            error-label="преимуществ"
             :class="$style.tags"
         />
 
@@ -135,6 +140,7 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
             id="disadvantages"
             v-model="formData.disadvantages"
             label="Недостатки"
+            error-label="недостатков"
             :class="$style.tags"
         />
 

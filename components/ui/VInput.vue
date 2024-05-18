@@ -11,6 +11,8 @@ interface IInputProps {
     autocomplete?: string,
     type?: InputTypesEnum,
     float?: boolean,
+    maxValue?: number,
+    maxlength?: number | null,
     sm?: boolean,
     withSubmitButton?: boolean,
 };
@@ -25,6 +27,8 @@ const props = withDefaults(defineProps<IInputProps>(), {
     autocomplete: 'off',
     type: InputTypesEnum.TEXT,
     float: false,
+    maxValue: Number.MAX_SAFE_INTEGER,
+    maxlength: null,
     sm: false,
     withSubmitButton: false,
 });
@@ -102,7 +106,7 @@ function onInputKeydown(event: KeyboardEvent) {
     const dotAllowed = ['.', ','].includes(event.key) && props.float && !inputValue.value?.includes('.') && Boolean(inputValue.value);
 
     const keyNotValid = !/\d/.test(event.key) && !allowedKeys.includes(event.key) && !event.ctrlKey && !dotAllowed;
-    const valueMax = /\d/.test(event.key) && Number((inputValue.value + event.key).replace(/\s/g, '')) >= Number.MAX_SAFE_INTEGER;
+    const valueMax = /\d/.test(event.key) && Number((inputValue.value + event.key).replace(/\s/g, '')) >= props.maxValue;
 
     // @ts-expect-error no selectionStart in event.target
     // —————————— No selectionStart? ——————————
@@ -161,6 +165,7 @@ function onSubmitButtonClick() {
             :type="inputType"
             :inputmode="inputMode"
             :autocomplete="props.autocomplete"
+            :maxlength="props.maxlength"
             tabindex="1"
             @focus="focused = true"
             @blur="focused = false"

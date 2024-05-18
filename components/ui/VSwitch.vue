@@ -16,7 +16,6 @@ const focus = ref<boolean>(false);
 <template>
     <div
         :class="$style.VSwitch"
-        @keypress.enter.prevent="modelValue = !modelValue"
     >
         <label
             v-if="props.label"
@@ -41,6 +40,7 @@ const focus = ref<boolean>(false);
                 tabindex="1"
                 @focus="focus = true"
                 @blur="focus = false"
+                @keypress.enter.prevent="modelValue = !modelValue"
             />
 
             <div :class="$style.circle"/>

@@ -121,7 +121,11 @@ function onItemGalleryOpen(images: string[]) {
 <style lang="scss" module>
 .RealtyPage {
     padding-top: calc($header-height + 2rem);
-    padding-bottom: 4rem;
+    padding-bottom: 34rem;
+
+    @include respond-to(mobile) {
+        padding-bottom: 37.2rem;
+    }
 }
 
 .realties {

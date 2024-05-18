@@ -1,21 +1,29 @@
 <script lang="ts" setup>
+import { NotificationTypesEnum } from '~/stores/types/notification';
 import type { IRealtyAdvantage } from '~/stores/types/realty';
 
 interface IRealtyAdvantagesInputProps {
     id: string,
     label: string,
+    errorLabel: string,
 };
 
 const props = defineProps<IRealtyAdvantagesInputProps>();
 
 const modelValue = defineModel<IRealtyAdvantage[]>();
 
+const notificationStore = useNotificationStore();
+
 let tagId = 1;
 function onTagSubmit(name: string) {
-    modelValue.value?.push({
-        id: tagId++,
-        name,
-    });
+    if (modelValue.value && modelValue.value.length < 6) {
+        modelValue.value.push({
+            id: tagId++,
+            name,
+        });
+    } else {
+        notificationStore.pushMessage(`Можно ввести не более 6 ${props.errorLabel}`, NotificationTypesEnum.ERROR);
+    }
 }
 
 function onTagClick(index: number) {
@@ -29,6 +37,7 @@ function onTagClick(index: number) {
             :id="props.id"
             :class="$style.input"
             :label="props.label"
+            :maxlength="15"
             sm
             with-submit-button
             @submit="onTagSubmit"

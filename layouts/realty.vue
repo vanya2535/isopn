@@ -17,14 +17,14 @@
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 9;
+    z-index: 8;
     width: 100%;
 }
 
 .notifications {
     position: fixed;
     right: 4rem;
-    top: calc($header-height + 2rem);
-    z-index: 8;
+    top: 2rem;
+    z-index: 9;
 }
 </style>
