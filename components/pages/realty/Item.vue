@@ -6,6 +6,7 @@ import { getRealtyTitle } from '~/assets/ts/utils/realtyUtils';
 
 interface IRealtyItemProps {
     realty: IRealty,
+    compared: boolean,
 };
 
 const props = defineProps<IRealtyItemProps>();
@@ -26,48 +27,20 @@ const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.m
 <template>
     <article
         ref="itemRef"
-        :class="[$style.Item, {[$style._visible]: contentVisible}]"
+        :class="[$style.Item, {
+            [$style._opened]: contentVisible,
+            [$style._compared]: props.compared
+        }]"
     >
         <div :class="$style.visible">
-            <div :class="$style.actions">
-                <button
-                    :class="[$style.button, {[$style._hidden]: !props.realty.images?.length}]"
-                    type="button"
-                    tabindex="1"
-                    @click="$emit('gallery', props.realty.images)"
-                >
-                    <SvgIcon
-                        :class="$style.icon"
-                        name="resize"
-                    />
-                </button>
-
-                <div :class="$style.actionsPart">
-                    <button
-                        :class="$style.button"
-                        type="button"
-                        tabindex="1"
-                        @click="$emit('update', props.realty)"
-                    >
-                        <SvgIcon
-                            :class="$style.icon"
-                            name="edit"
-                        />
-                    </button>
-
-                    <button
-                        :class="$style.button"
-                        type="button"
-                        tabindex="1"
-                        @click="$emit('remove', props.realty._id)"
-                    >
-                        <SvgIcon
-                            :class="$style.icon"
-                            name="trash"
-                        />
-                    </button>
-                </div>
-            </div>
+            <PagesRealtyUtilityItemActions
+                :realty="props.realty"
+                :compared="compared"
+                @gallery="$emit('gallery', $event)"
+                @compare="$emit('compare', $event)"
+                @update="$emit('update', $event)"
+                @remove="$emit('remove', $event)"
+            />
 
             <PagesRealtyUtilityItemSlider
                 :class="$style.slider"
@@ -153,8 +126,13 @@ const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.m
 <style lang="scss" module>
 .Item {
     position: relative;
+    transition: box-shadow .3s ease;
 
-    &._visible .hidden {
+    &._compared .visible {
+        box-shadow: inset 0 .2rem .1rem $base400;
+    }
+
+    &._opened .hidden {
         @include respond-to(mobile) {
             transform: translateY(calc(100% - 1rem));
 
@@ -182,46 +160,7 @@ const realtyDisadvantages = computed<string>(() => props.realty.disadvantages?.m
     border-radius: .8rem;
     padding: 1rem;
     height: 100%;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
-
-.actionsPart {
-    display: flex;
-    column-gap: .6rem;
-    align-items: center;
-}
-
-.button {
-    width: 2rem;
-    height: 2rem;
-
-    &._hidden {
-        visibility: hidden;
-    }
-
-    &:hover .icon,
-    &:focus .icon {
-        @include respond-to(desktop) {
-            color: $base100;
-        }
-    }
-
-    &:active .icon {
-        @include respond-to(desktop) {
-            color: $base50;
-        }
-    }
-}
-
-.icon {
-    color: $base400;
-    transition: color .3s ease;
+    transition: box-shadow .3s ease;
 }
 
 .content {

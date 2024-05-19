@@ -41,11 +41,11 @@
 
 .container {
     margin: 0 auto;
-    max-width: 128rem;
+    width: 128rem;
 
     @include respond-to(mobile) {
         margin: 0;
         padding: 0 1.6rem;
-        max-width: 100%;
+        width: 100%;
     }
 }

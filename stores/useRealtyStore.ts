@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 import type { IFetchErrorData, IFetchError, TRequestResponse } from '~/types/fetch';
-import type { IRealty, IRealtyInput, IRealtyStats } from '~/stores/types/realty';
+import type { IRealty, IRealtyInput, IRealtyStats, TRealtyCompareMap } from '~/stores/types/realty';
 
 import { objectToFormData } from '~/assets/ts/utils/objectUtils';
 
@@ -10,6 +10,7 @@ export const useRealtyStore = defineStore('realty', () => {
 
     const realties = ref<IRealty[]>([]);
     const stats = ref<IRealtyStats | null>(null);
+    const compareMap = ref<TRealtyCompareMap>({});
 
     const limit = 20;
     const offset = ref<number>(0);
@@ -57,6 +58,11 @@ export const useRealtyStore = defineStore('realty', () => {
             const realtyIndex = realties.value.findIndex((realty: IRealty) => realty._id === id);
             realties.value[realtyIndex] = res.result;
 
+            if (compareMap.value[id]) {
+                delete compareMap.value[id];
+                compareMap.value[id] = res.result;
+            }
+
             getStats();
             return Promise.resolve(res.result);
         } catch (e) {
@@ -71,6 +77,8 @@ export const useRealtyStore = defineStore('realty', () => {
 
             const realtyIndex = realties.value.findIndex((realty: IRealty) => realty._id === id);
             realties.value.splice(realtyIndex, 1);
+
+            delete compareMap.value[id];
 
             count.value--;
             getStats();
@@ -100,9 +108,18 @@ export const useRealtyStore = defineStore('realty', () => {
         }
     }
 
+    function compare(realty: IRealty) {
+        if (compareMap.value[realty._id]) {
+            delete compareMap.value[realty._id];
+        } else {
+            compareMap.value[realty._id] = realty;
+        }
+    }
+
     return {
         realties,
         stats,
+        compareMap,
         limit,
         count,
 
@@ -112,5 +129,6 @@ export const useRealtyStore = defineStore('realty', () => {
         remove,
         clear,
         getStats,
+        compare,
     };
 });

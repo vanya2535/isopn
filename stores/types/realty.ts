@@ -60,3 +60,5 @@ export interface IRealtyStats {
     allPrice: TRealtyStat,
     allRooms: TRealtyStat,
 };
+
+export type TRealtyCompareMap = Record<string, IRealty>;

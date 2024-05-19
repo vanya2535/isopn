@@ -60,8 +60,15 @@ function onBarTouchend() {
     });
 }
 
+function onEscKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+        onClose();
+    }
+}
+
 onMounted(() => {
     document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onEscKeydown);
 
     setTimeout(() => {
         opened.value = true;
@@ -70,6 +77,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     document.body.style.overflow = 'auto';
+    document.removeEventListener('keydown', onEscKeydown);
 });
 </script>
 

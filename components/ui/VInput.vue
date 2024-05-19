@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { InputTypesEnum } from './types';
-import type { HTMLInputEvent } from '~/types/html';
+import type { HTMLInputEvent } from '~/types/implement';
 
 import { splitThousands } from '~/assets/ts/utils/numberUtils';
 

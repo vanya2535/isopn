@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { HTMLInputEvent } from '~/types/html';
+import type { HTMLInputEvent } from '~/types/implement';
 import { NotificationTypesEnum } from '~/stores/types/notification';
 
 import { getFilesFromList } from '~/assets/ts/utils/fileUtils';

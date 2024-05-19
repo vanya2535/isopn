@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<IButtonProps>(), {
             :name="props.icon"
         />
 
-        <slot v-if="!squared" />
+        <slot />
     </button>
 </template>
 

@@ -37,7 +37,7 @@ const loadMoreAvailable = computed<boolean>(() => realtyStore.realties.length < 
 const moreCount = computed<number>(() => realtyStore.count - realtyStore.realties.length);
 
 function getItemZIndex(index: number) {
-    return realtyStore.realties.length - index;
+    return `z-index: ${realtyStore.realties.length - index}`;
 }
 
 function onRealtyUpdate(realty: IRealty) {
@@ -70,10 +70,12 @@ function onItemGalleryOpen(images: string[]) {
                     v-for="(realty, index) in realtyStore.realties"
                     :key="realty._id"
                     :realty="realty"
-                    :style="`z-index: ${getItemZIndex(index)}`"
+                    :compared="Boolean(realtyStore.compareMap[realty._id])"
+                    :style="getItemZIndex(index)"
                     @gallery="onItemGalleryOpen"
+                    @compare="realtyStore.compare"
                     @update="onRealtyUpdate"
-                    @remove="realtyStore.remove($event)"
+                    @remove="realtyStore.remove"
                 />
             </transition-group>
         </section>

@@ -4,16 +4,22 @@ import type { IMapGeoData } from '~/types/map';
 
 interface ICommonMapProps {
     realty: IRealty | IRealtyInput,
+    draggable?: boolean,
+    noLabel?: boolean,
 };
 
 interface ICommonMapEmits {
     (e: 'input', geoData: IMapGeoData): void,
 };
 
-const props = defineProps<ICommonMapProps>();
+const props = withDefaults(defineProps<ICommonMapProps>(), {
+    draggable: false,
+    noLabel: false,
+});
+
 const emit = defineEmits<ICommonMapEmits>();
 
-const { mapRef, mapReady, geoData } = useMap(true, props.realty.coords);
+const { mapRef, mapReady, geoData } = useMap(props.draggable, props.realty.coords);
 
 watch(geoData, value => {
     emit('input', value);
@@ -26,7 +32,7 @@ watch(geoData, value => {
     <div :class="$style.Map">
         <transition name="fade">
             <h3
-                v-if="mapReady"
+                v-if="mapReady && !noLabel"
                 :class="$style.label"
             >
                 Местоположение

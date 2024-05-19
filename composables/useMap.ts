@@ -37,8 +37,8 @@ export const useMap = (draggable = false, pinCoords = baseCoords) => {
 
         const map: YMap = new YMap(<HTMLElement>mapRef.value, {
             location: {
-                center: baseCoords,
-                zoom: 10,
+                center: pinCoords,
+                zoom: 12,
             },
         });
 

@@ -147,6 +147,7 @@ const realtyTitle = computed<string>(() => getRealtyTitle(formData.value.rooms))
         <CommonMap
             :class="$style.map"
             :realty="formData"
+            draggable
             @input="onMapInput"
         />
 

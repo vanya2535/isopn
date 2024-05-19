@@ -43,13 +43,13 @@ function onTagClick(index: number) {
             @submit="onTagSubmit"
         />
 
-        <PagesRealtyUtilityTag
+        <PagesRealtyAdvantageTag
             v-for="(tag, index) in modelValue"
             :key="tag.id"
+            :advantage="tag"
+            clickable
             @click="onTagClick(index)"
-        >
-            {{ tag.name }}
-        </PagesRealtyUtilityTag>
+        />
     </div>
 </template>
 

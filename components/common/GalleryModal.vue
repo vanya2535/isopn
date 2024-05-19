@@ -9,7 +9,20 @@ interface IGalleryModalProps {
 
 const props = defineProps<IGalleryModalProps>();
 
-const { sliderRef, initSlider } = useSlider({});
+const sliderMove = ref<boolean>(false);
+const { sliderRef, initSlider } = useSlider({
+    slidesPerView: 'auto',
+
+    on: {
+        touchMove: () => {
+            sliderMove.value = true;
+        },
+
+        touchEnd: () => {
+            sliderMove.value = false;
+        },
+    },
+});
 
 onMounted(() => {
     initSlider();
@@ -25,7 +38,7 @@ onMounted(() => {
         <div
             v-if="props.images.length"
             ref="sliderRef"
-            :class="$style.slider"
+            :class="[$style.slider, {[$style._move]: sliderMove}]"
         >
             <div class="swiper-wrapper">
                 <img
@@ -46,6 +59,11 @@ onMounted(() => {
 
 .slider {
     overflow: hidden;
+    cursor: grab;
+
+    &._move {
+        cursor: grabbing;
+    }
 }
 
 .slider,
