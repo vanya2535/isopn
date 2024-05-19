@@ -76,4 +76,8 @@ onMounted(() => {
         height: 40rem;
     }
 }
+
+.image {
+    object-fit: contain;
+}
 </style>
