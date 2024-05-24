@@ -62,8 +62,6 @@ function onItemGalleryOpen(images: string[]) {
 
 <template>
     <main :class="[$style.RealtyPage, 'page']">
-        <div :class="$style.pie" />
-
         <section :class="[$style.realties, 'container']">
             <transition-group name="slide-top-bottom">
                 <PagesRealtyItem
