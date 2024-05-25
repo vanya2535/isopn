@@ -35,6 +35,7 @@ useAsyncData(async () => {
 
 const loadMoreAvailable = computed<boolean>(() => realtyStore.realties.length < realtyStore.count);
 const moreCount = computed<number>(() => realtyStore.count - realtyStore.realties.length);
+const showMoreCount = computed<number>(() => moreCount.value > realtyStore.limit ? realtyStore.limit : moreCount.value);
 
 function getItemZIndex(index: number) {
     return `z-index: ${realtyStore.realties.length - index}`;
@@ -86,7 +87,7 @@ function onItemGalleryOpen(images: string[]) {
                 primary
                 @click="onMoreButtonClick"
             >
-                Показать еще {{ splitThousands(realtyStore.limit) }} из {{ splitThousands(moreCount) }} квартир{{ plural(moreCount, ['ы', '', '']) }}
+                Показать еще {{ splitThousands(showMoreCount) }} из {{ splitThousands(moreCount) }} квартир{{ plural(moreCount, ['ы', '', '']) }}
             </UiVButton>
         </transition>
 
