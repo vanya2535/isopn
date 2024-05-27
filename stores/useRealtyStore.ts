@@ -12,7 +12,7 @@ export const useRealtyStore = defineStore('realty', () => {
     const stats = ref<IRealtyStats | null>(null);
     const compareMap = ref<TRealtyCompareMap>({});
 
-    const limit = 20;
+    const limit = 12;
     const offset = ref<number>(0);
     const count = ref<number>(0);
 
