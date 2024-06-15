@@ -24,9 +24,10 @@ const chartRef = ref<ChartItem | null>(null);
 
 const chartVisible = computed<boolean>(() => Boolean(Object.values(props.stat).length));
 
+let chartInstance: Chart<'pie', number[], string> | null = null;
 onMounted(() => {
     if (chartRef.value) {
-        new Chart(chartRef.value, {
+        chartInstance = new Chart(chartRef.value, {
             type: 'pie',
             data: {
                 labels: Object.keys(props.stat).map(dataMapCallbacks[props.type]),
@@ -35,6 +36,12 @@ onMounted(() => {
                 }],
             },
         });
+    }
+});
+
+onBeforeUnmount(() => {
+    if (chartInstance) {
+        chartInstance.destroy();
     }
 });
 </script>
